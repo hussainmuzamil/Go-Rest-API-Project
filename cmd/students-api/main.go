@@ -1,8 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+
+	"github.com/hussainmuzamil/students-api/internal/config"
+)
 
 func main() {
-	fmt.Println("Welcome to students api")
+	cfg := config.MustLoad()
+	http.ListenAndServe(cfg.Addr,cfg.)
 }
  

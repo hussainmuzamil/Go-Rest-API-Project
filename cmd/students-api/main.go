@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"github.com/hussainmuzamil/students-api/internal/config"
+	"github.com/hussainmuzamil/students-api/internal/http/handlers/student"
 	"log"
 	"log/slog"
 	"net/http"
@@ -13,15 +14,12 @@ import (
 )
 
 func main() {
+	//load config
 	cfg := config.MustLoad()
-
+	//setup router
 	router := http.NewServeMux()
-	router.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		_, err := w.Write([]byte("Hello World"))
-		if err != nil {
-			log.Fatal(err)
-		}
-	})
+	//get end-point
+	router.HandleFunc("POST /api/students", student.New())
 
 	//setup server
 	server := http.Server{

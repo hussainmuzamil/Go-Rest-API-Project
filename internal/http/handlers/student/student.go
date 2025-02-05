@@ -13,7 +13,7 @@ import (
 
 func New() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		slog.Info("Creating new student")
+		slog.Info("creating new student")
 
 		var student types.Student
 		err := json.NewDecoder(r.Body).Decode(&student)
@@ -22,6 +22,21 @@ func New() http.HandlerFunc {
 			_ = response.WriteJson(w, http.StatusBadRequest, response.ErrorResponse(fmt.Errorf("request body is Empty")))
 			return
 		}
+
+		if(err != nil){
+			response.WriteJson(w,http.StatusBadRequest,response.ErrorResponse(err))
+			return
+		}
+		
+		if err := validator.New().Struct(student); err != nil{
+			response.WriteJson(w,http.StatusBadRequest,response.Error(err))
+			return
+		}
+
+		slog.Info("Student Request With Request Body",student)
+
+
+
 		_ = response.WriteJson(w, http.StatusCreated, map[string]string{"message": "Student created successfully"})
 	}
 }
